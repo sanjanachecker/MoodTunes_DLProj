@@ -1,6 +1,7 @@
 from midi2audio import FluidSynth
 import pretty_midi
 import numpy as np
+import pandas as pd
 import matplotlib.pyplot as plt
 
 TIME_STEP = 0.001
@@ -71,15 +72,33 @@ def vector_to_midi(vector, time_step=TIME_STEP, max_time=MAX_TIME):
     instrument.notes.append(note)
 
   midi_data.instruments.append(instrument)
-  return midi_data
+  return 
 
+# returns an array of all file names and an array of emotion levels
+def load_midi_emotion_labels(label):
+  dataframe = pd.read_csv(label)
+  midi_files = []
+  emotions = []
+  emotion_mapping = {
+    "Q1": "Happy",
+    "Q2": "Angry",
+    "Q3": "Sad",
+    "Q4": "Relaxed"
+  }
+  for item in dataframe['ID']:
+    quadrant = item.split('_')[0]
+    emotion = emotion_mapping.get(quadrant, "Unknown")
+    midi_files.append(item)
+    emotions.append(emotion)
+  return midi_files, emotions
 
 vec = midi_to_vector('example.mid')
 midi = vector_to_midi(vec.flatten())
 midi.write("output_file.mid")
 
-
 plt.imshow(vec * 2, cmap='plasma')
 plt.show()
+
+midi_files, emotions = load_midi_emotion_labels('EMOPIA_1.0/label.csv')
 
 midi_to_audio('output_file.mid', 'new.wav')

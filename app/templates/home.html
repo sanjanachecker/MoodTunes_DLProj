@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Music Generator</title>
+  <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+  />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="container d-flex justify-content-center align-items-center" style="min-height: 100vh;">
+    <div class="card text-center">
+      <h2>Generate Music Personalized to Your Mood</h2>
+      <div class="mb-4">
+        <h5 class="mb-3">Choose an Emotion</h5>
+        <div class="btn-group mb-4" role="group" aria-label="Emotion Selector">
+          <input type="radio" class="btn-check" name="inputOption" id="happy" value="happy">
+          <label class="btn btn-outline-primary" for="happy">Happy</label>
+        
+          <input type="radio" class="btn-check" name="inputOption" id="sad" value="sad">
+          <label class="btn btn-outline-primary" for="sad">Sad</label>
+        
+          <input type="radio" class="btn-check" name="inputOption" id="angry" value="angry">
+          <label class="btn btn-outline-primary" for="angry">Angry</label>
+        
+          <input type="radio" class="btn-check" name="inputOption" id="relaxed" value="relaxed">
+          <label class="btn btn-outline-primary" for="relaxed">Relaxed</label>
+        </div>
+        
+        <hr class="my-3">
+        <h5 class="mb-3">or Describe How You're Feeling</h5>
+        <textarea class="form-control" id="customEmotion" rows="2" placeholder="Enter how you are feeling..."></textarea>
+      </div>
+      <button class="btn btn-success" id="generateButton">Generate</button>
+    </div>
+  </div>
+
+  <script
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+  ></script>
+  <script>
+    const generateButton = document.getElementById('generateButton');
+    const emotionOptions = document.getElementsByName('inputOption');
+    const customEmotionInput = document.getElementById('customEmotion');
+
+    generateButton.addEventListener('click', () => {
+      let selectedEmotion = null;
+      let customEmotion = customEmotionInput.value.trim();
+
+      // Check if a predefined emotion is selected
+      emotionOptions.forEach((option) => {
+        if (option.checked) {
+          selectedEmotion = option.value;
+        }
+      });
+
+      if (selectedEmotion) {
+        alert(`Generating music for emotion: ${selectedEmotion}`);
+        // TODO: generate music for predefined emotion
+      } else if (customEmotion) {
+        alert(`Generating music for your feeling: "${customEmotion}"`);
+        // TODO: use gemini to get input data
+      } else {
+        alert("Please select an emotion or describe how you're feeling.");
+      }
+    });
+
+    // only one option can be used at a time
+    customEmotionInput.addEventListener('input', () => {
+      if (customEmotionInput.value.trim() !== "") {
+        emotionOptions.forEach(option => option.checked = false);
+      }
+    });
+
+    emotionOptions.forEach(option => {
+      option.addEventListener('change', () => {
+        if (option.checked) {
+          customEmotionInput.value = "";
+        }
+      });
+    });
+  </script>
+</body>
+</html>
